@@ -5,19 +5,19 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: d1c3109bdb54ad54c8a2b2838528e640
   - enabled: 1
-    path: Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scenes/DemoAsteroids-LobbyScene.unity
-    guid: c8a9d1312a49dc8488a9b32d83d659c7
+    path: Assets/Scenes/Launcher.unity
+    guid: 7da1ac688b858184b813c798d7c41f5f
   - enabled: 1
-    path: Assets/Photon/PhotonUnityNetworking/Demos/DemoAsteroids/Scenes/DemoAsteroids-GameScene.unity
-    guid: 98efc37d6307844488eb3e4247dde7e9
+    path: Assets/Scenes/Room For 1.unity
+    guid: b609482e5a98295488612c74f3d90be2
   - enabled: 1
-    path: Assets/Photon/PhotonUnityNetworking/Demos/DemoSlotRacer/SlotCar-Scene.unity
-    guid: 711b38c07f2cf904f81b3422c67f1825
+    path: Assets/Scenes/Room For 2.unity
+    guid: cf1847c6d8715cb4aa4e7b599c13d0df
   - enabled: 1
-    path: Assets/Photon/PhotonUnityNetworking/Demos/PunCockpit/PunCockpit-Scene.unity
-    guid: 9d6d60c803e244e51ba945a84b88757d
+    path: Assets/Scenes/Room For 3.unity
+    guid: 516b8f277181afc4c89c3a5496d16414
+  - enabled: 1
+    path: Assets/Scenes/Room For 4.unity
+    guid: d43a2299a2a62044bb847a0af37dca18
   m_configObjects: {}
