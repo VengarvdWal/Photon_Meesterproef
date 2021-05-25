@@ -130,10 +130,16 @@ namespace Photon.Pun.Demo.PunBasics
         /// </summary>
         public void Update()
         {
+            
             // we only process Inputs and check health if we are the local player
             if (photonView.IsMine)
             {
                 this.ProcessInputs();
+
+                if (this.transform.position.y <= 0f)
+                {
+                    this.transform.position = new Vector3(0f, 5f, 7.5f);
+                }
 
                 if (this.Health <= 0f)
                 {
@@ -216,7 +222,7 @@ namespace Photon.Pun.Demo.PunBasics
             // check if we are outside the Arena and if it's the case, spawn around the center of the arena in a safe zone
             if (!Physics.Raycast(transform.position, -Vector3.up, 5f))
             {
-                transform.position = new Vector3(0f, 5f, 0f);
+                transform.position = new Vector3(0f, 5f, 7.5f);
             }
 
             GameObject _uiGo = Instantiate(this.playerUiPrefab);
@@ -240,28 +246,28 @@ namespace Photon.Pun.Demo.PunBasics
         /// </summary>
         void ProcessInputs()
         {
-            if (Input.GetButtonDown("Fire1"))
-            {
-                // we don't want to fire when we interact with UI buttons for example. IsPointerOverGameObject really means IsPointerOver*UI*GameObject
-                // notice we don't use on on GetbuttonUp() few lines down, because one can mouse down, move over a UI element and release, which would lead to not lower the isFiring Flag.
-                if (EventSystem.current.IsPointerOverGameObject())
-                {
-                    //	return;
-                }
+            //if (Input.GetButtonDown("Fire1"))
+            //{
+            //    // we don't want to fire when we interact with UI buttons for example. IsPointerOverGameObject really means IsPointerOver*UI*GameObject
+            //    // notice we don't use on on GetbuttonUp() few lines down, because one can mouse down, move over a UI element and release, which would lead to not lower the isFiring Flag.
+            //    if (EventSystem.current.IsPointerOverGameObject())
+            //    {
+            //        //	return;
+            //    }
 
-                if (!this.IsFiring)
-                {
-                    this.IsFiring = true;
-                }
-            }
+            //    if (!this.IsFiring)
+            //    {
+            //        this.IsFiring = true;
+            //    }
+            //}
 
-            if (Input.GetButtonUp("Fire1"))
-            {
-                if (this.IsFiring)
-                {
-                    this.IsFiring = false;
-                }
-            }
+            //if (Input.GetButtonUp("Fire1"))
+            //{
+            //    if (this.IsFiring)
+            //    {
+            //        this.IsFiring = false;
+            //    }
+            //}
         }
 
         #endregion

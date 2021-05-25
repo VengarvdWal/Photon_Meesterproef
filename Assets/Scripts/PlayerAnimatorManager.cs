@@ -13,13 +13,22 @@ namespace Com.MyCompany.MyGame
 		[SerializeField]
 		private Animator animator;
 		private float directionDampTime = 0.25f;
+		private PlayerControls inputActions;
+		private CharacterController controller;
 
-		#endregion
+        #endregion
 
-		#region MonoBehaviour Callbacks
-		// Start is called before the first frame update
-		void Start()
+        #region MonoBehaviour Callbacks
+
+        private void Awake()
+        {
+			inputActions = new PlayerControls();
+			
+        }
+        // Start is called before the first frame update
+        void Start()
 		{
+			controller = GetComponent<CharacterController>();
 			animator = GetComponent<Animator>();
 			if (!animator)
 			{
@@ -44,18 +53,25 @@ namespace Com.MyCompany.MyGame
 
 			if (stateInfo.IsName("Base Layer.Run"))
 			{
-				if (Input.GetButtonDown("Fire2"))
+				if (inputActions.PlayerMain.Jump.triggered)
 				{
 					animator.SetTrigger("Jump");
 				}
 			}
-			float h = Input.GetAxis("Horizontal");
-			float v = Input.GetAxis("Vertical");
 
-			if (v < 0)
-			{
-				v = 0;
-			}
+			Vector2 movement = inputActions.PlayerMain.Move.ReadValue<Vector2>();
+			Vector3 move = new Vector3(movement.x, 0, movement.y);
+			controller.Move(move * Time.deltaTime * 5);
+
+			float h = inputActions.PlayerMain.Move.ReadValue<Vector2>().x;
+			float v = inputActions.PlayerMain.Move.ReadValue<Vector2>().y;
+
+
+			//float h = Input.GetAxis("Horizontal");
+			//float v = Input.GetAxis("Vertical");
+
+			Debug.Log(movement);
+
 			animator.SetFloat("Speed", h * h + v * v);
 			animator.SetFloat("Direction", h, directionDampTime, Time.deltaTime);
 		}

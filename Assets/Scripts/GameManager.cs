@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 using Photon.Pun;
 using Photon.Realtime;
@@ -14,15 +15,31 @@ namespace Com.MyCompany.MyGame
 
 #region Public Fields
 		public static GameManager Instance;
-		public GameObject playerPrefab;
 
-#endregion
+		#endregion
+
+#region Private Fields
+
+		private GameObject instance;
+
+		[Tooltip("The prefab to use for representing the player")]
+		[SerializeField]
+		private GameObject playerPrefab;
+
+		#endregion
 
 #region MonoBehaviour Callbacks
 
 		private void Start()
 		{
 			Instance = this;
+
+			if (!PhotonNetwork.IsConnected)
+			{
+				SceneManager.LoadScene("Launcher");
+
+				return;
+			}
 			if (playerPrefab == null)
 			{
 				Debug.LogError("<Color=Red><a>Missing</a></Color> playerPrefab Reference. Please set it up in GameObject 'Game Manager'", this);
@@ -31,57 +48,23 @@ namespace Com.MyCompany.MyGame
 			{
 				if (PlayerManager.LocalPlayerInstance == null)
 				{
-					Debug.LogFormat("We are Instantiating LocalPlayer from {0}", Application.loadedLevelName);
+					Debug.LogFormat("We are Instantiating LocalPlayer from {0}", SceneManagerHelper.ActiveSceneName);
 
-					PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 0f), Quaternion.identity, 0);
+					PhotonNetwork.Instantiate(this.playerPrefab.name, new Vector3(0f, 5f, 7.5f), Quaternion.identity, 0);
 				}
 				else
 				{
 					Debug.LogFormat("Ignoring scene load for {0}", SceneManagerHelper.ActiveSceneName);
 				}
-#if UNITY_5_4_OR_NEWER
-				UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
-#endif
-
 			}
-		}
+		}        
 
-#if !UNITY_5_4_OR_NEWER
+        #endregion
 
-		void OnLevelWasLoaded(int level)
-		{
-			this.CalledOnLevelWasLoaded(level);
-		}
-#endif
-		void CalledOnLevelWasLoaded(int level)
-		{
-			if (!Physics.Raycast(transform.position, -Vector3.up, 5f))
-			{
-				transform.position = new Vector3(0f, 5f, 0f);
-			}
-		}
+        #region Photon Callbacks
 
 
-#if UNITY_5_4_OR_NEWER
-		public override void OnDisable()
-		{
-			base.OnDisable();
-			UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
-		}
-#endif
-
-#endregion
-
-
-
-#region Photon Callbacks
-
-		public override void OnLeftRoom()
-		{
-			SceneManager.LoadScene(0);
-		}
-
-		public override void OnPlayerEnteredRoom(Player other)
+        public override void OnPlayerEnteredRoom(Player other)
 		{
 			Debug.LogFormat("OnPlayerEnteredRoom() {0}", other.NickName);
 
@@ -91,8 +74,7 @@ namespace Com.MyCompany.MyGame
 
 				LoadArena();
 			}
-		}
-	
+		}	
 
 		public override void OnPlayerLeftRoom(Player other)
 		{
@@ -107,7 +89,12 @@ namespace Com.MyCompany.MyGame
 			}
 		}
 
-#endregion
+		public override void OnLeftRoom()
+		{
+			SceneManager.LoadScene("Launcher");
+		}
+
+		#endregion
 
 #region Public Methods
 
@@ -116,9 +103,14 @@ namespace Com.MyCompany.MyGame
 			PhotonNetwork.LeaveRoom();
 		}
 
-#endregion
+		public void QuitApplication()
+		{
+			Application.Quit();
+		}
 
-#region Private Methods
+		#endregion
+
+		#region Private Methods
 		void LoadArena()
 		{
 			if (!PhotonNetwork.IsMasterClient)
@@ -126,16 +118,11 @@ namespace Com.MyCompany.MyGame
 				Debug.LogError("PhotonNetwork : Trying to Load a level but we are not the master Client");
 			}
 			Debug.LogFormat("PhotonNetwork : Loading Level : {0}", PhotonNetwork.CurrentRoom.PlayerCount);
-			PhotonNetwork.LoadLevel("Room for " + PhotonNetwork.CurrentRoom.PlayerCount);
-
+			//PhotonNetwork.LoadLevel("Room for " + PhotonNetwork.CurrentRoom.PlayerCount);
+			PhotonNetwork.LoadLevel("Mobile Test");
+			
 		}
 
-#if UNITY_5_4_OR_NEWER
-		void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode LoadingMode)
-		{
-			this.CalledOnLevelWasLoaded(scene.buildIndex);
-		}
-#endif
 
 #endregion
 

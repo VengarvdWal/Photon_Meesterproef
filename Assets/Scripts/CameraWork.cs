@@ -88,11 +88,10 @@ namespace Com.MyCompany.MyGame
 			cameraOffset.z = -distance;
 			cameraOffset.y = height;
 
-
 			cameraTransform.position = Vector3.Lerp(cameraTransform.position, this.transform.position + this.transform.TransformVector(cameraOffset), smoothSpeed * Time.deltaTime);
 
-
 			cameraTransform.LookAt(this.transform.position + centerOffset);
+
 		}
 
 
@@ -101,9 +100,7 @@ namespace Com.MyCompany.MyGame
 			cameraOffset.z = -distance;
 			cameraOffset.y = height;
 
-
 			cameraTransform.position = this.transform.position + this.transform.TransformVector(cameraOffset);
-
 
 			cameraTransform.LookAt(this.transform.position + centerOffset);
 		}
